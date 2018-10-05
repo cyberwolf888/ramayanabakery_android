@@ -30,7 +30,7 @@ class ListTokoActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        val url = RequestServer().getServer_url() + "getCategory"
+        val url = RequestServer().getServer_url() + "list_toko.php"
         val jsonReq = JsonObject()
         jsonReq.addProperty("id", true)
 
@@ -40,7 +40,7 @@ class ListTokoActivity : AppCompatActivity() {
                 //.setLogging("ION_VERBOSE_LOGGING", Log.VERBOSE)
                 .setJsonObjectBody(jsonReq)
                 .asJsonObject()
-                .setCallback(FutureCallback<JsonObject> { e, result ->
+                .setCallback { e, result ->
                     Log.d("Response", ">" + result)
                     try {
                         val mData = result.getAsJsonArray("data")
@@ -48,8 +48,8 @@ class ListTokoActivity : AppCompatActivity() {
                         for (i in 0 until mData.size()) {
                             val objData = mData.get(i).asJsonObject
                             val dataList = HashMap<String, String>()
-                            dataList.put("id", objData.get("id").asString)
-                            dataList.put("name", objData.get("name").asString)
+                            dataList.put("id", objData.get("id_member").asString)
+                            dataList.put("name", objData.get("nama_toko").asString)
                             xitemList.add(dataList)
                         }
                         val adapter = SimpleAdapter(
@@ -62,15 +62,15 @@ class ListTokoActivity : AppCompatActivity() {
                         lvToko.adapter = adapter
                         lvToko.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
                             val objSelected = mData.get(i).asJsonObject
-                            setOutput(objSelected.get("id").asString, objSelected.get("name").asString)
+                            setOutput(objSelected.get("id_member").asString, objSelected.get("nama_toko").asString)
                             finish()
                         }
                     } catch (ex: Exception) {
-                        Snackbar.make(findViewById(R.id.login_form), "Terjadi kesalahan saaat menyambung ke server.", Snackbar.LENGTH_INDEFINITE)
+                        Snackbar.make(findViewById(R.id.lvToko), "Terjadi kesalahan saaat menyambung ke server.", Snackbar.LENGTH_INDEFINITE)
                                 .setAction("Tutup") { }.show()
                     }
                     showProgress(false)
-                })
+                }
     }
 
     private fun setOutput(id_toko:String, nama_toko:String){

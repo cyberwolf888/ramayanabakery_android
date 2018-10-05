@@ -23,9 +23,14 @@ class TambahPenjualanActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        toko.setOnClickListener{ view ->
+        toko.setOnClickListener{
             val i = Intent(this@TambahPenjualanActivity, ListTokoActivity::class.java)
             startActivityForResult(i, REQ_TOKO)
+        }
+
+        produk.setOnClickListener{
+            val i = Intent(this@TambahPenjualanActivity, ListProdukActivity::class.java)
+            startActivityForResult(i, REQ_PRODUK)
         }
     }
 
@@ -67,7 +72,7 @@ class TambahPenjualanActivity : AppCompatActivity() {
         if (requestCode == REQ_PRODUK && resultCode == Activity.RESULT_OK && data != null) {
             val id_produk = data.getStringExtra("id_produk")
             val nama_produk = data.getStringExtra("nama_produk")
-            //etSatuan.setText(satuan)
+            produk.setText(nama_produk)
         }
     }
 }

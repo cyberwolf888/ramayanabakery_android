@@ -87,7 +87,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             return true
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(email, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(id_user, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok,
                             { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) })
         } else {
@@ -117,11 +117,11 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     private fun attemptLogin() {
 
         // Reset errors.
-        email.error = null
+        id_user.error = null
         password.error = null
 
         // Store values at the time of the login attempt.
-        val emailStr = email.text.toString()
+        val id_userStr = id_user.text.toString()
         val passwordStr = password.text.toString()
 
         var cancel = false
@@ -135,13 +135,9 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(emailStr)) {
-            email.error = getString(R.string.error_field_required)
-            focusView = email
-            cancel = true
-        } else if (!isEmailValid(emailStr)) {
-            email.error = getString(R.string.error_invalid_email)
-            focusView = email
+        if (TextUtils.isEmpty(id_userStr)) {
+            id_user.error = getString(R.string.error_field_required)
+            focusView = id_user
             cancel = true
         }
 
@@ -153,11 +149,11 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true)
-            val url = RequestServer().getServer_url() + "login"
+            val url = RequestServer().getServer_url() + "login.php"
             Log.d("Login Url", ">" + url)
 
             val jsonReq = JsonObject()
-            jsonReq.addProperty("email", emailStr)
+            jsonReq.addProperty("username", id_userStr)
             jsonReq.addProperty("password", passwordStr)
             Log.d("Cek Req", ">" + jsonReq)
 
@@ -166,8 +162,9 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                     //.setLogging("ION_VERBOSE_LOGGING", Log.VERBOSE)
                     .setJsonObjectBody(jsonReq)
                     .asJsonObject()
-                    .setCallback(FutureCallback<JsonObject> { e, result ->
+                    .setCallback{ e, result ->
                         Log.d("Response", ">" + result)
+
                         try {
                             val status = result.get("status").toString()
 
@@ -175,11 +172,11 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                                 val data = result.getAsJsonObject("data")
 
                                 var photo = ""
-                                if (!data.get("img").isJsonNull) {
-                                    photo = data.get("img").asString
+                                if (!data.get("foto").isJsonNull) {
+                                    photo = data.get("foto").asString
                                 }
 
-                                session!!.createLoginSession(data.get("id").asString, data.get("name").asString, photo, data.get("email").asString)
+                                session!!.createLoginSession(data.get("id_pegawai").asString, data.get("nama_pegawai").asString, photo, data.get("id_user").asString)
                                 val i = baseContext.packageManager.getLaunchIntentForPackage(baseContext.packageName)
                                 i!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -195,7 +192,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                             Snackbar.make(findViewById(R.id.login_form), "Terjadi kesalahan saaat menyambung ke server.", Snackbar.LENGTH_INDEFINITE)
                                     .setAction("Tutup") { }.show()
                         }
-                    })
+                    }
         }
     }
 
@@ -270,7 +267,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             cursor.moveToNext()
         }
 
-        addEmailsToAutoComplete(emails)
+        //addEmailsToAutoComplete(emails)
     }
 
     override fun onLoaderReset(cursorLoader: Loader<Cursor>) {
@@ -282,7 +279,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         val adapter = ArrayAdapter(this@LoginActivity,
                 android.R.layout.simple_dropdown_item_1line, emailAddressCollection)
 
-        email.setAdapter(adapter)
+        id_user.setAdapter(adapter)
     }
 
     object ProfileQuery {

@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             email.text = session!!.getEmail()
             if (!session!!.getPhoto().equals("")) {
                 Ion.with(this)
-                        .load(RequestServer().getServer_url() + "../assets/img/profile/" + session!!.getPhoto())
+                        .load(RequestServer().getImg_url()+ session!!.getPhoto())
                         .withBitmap()
                         .placeholder(R.drawable.guest)
                         .error(R.drawable.guest)
@@ -95,6 +95,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.nav_home -> {
                 // Handle the camera action
+            }
+            R.id.nav_toko -> {
+                val i = Intent(this@MainActivity, KelolaTokoActivity::class.java)
+                startActivity(i)
             }
             R.id.nav_myaccount -> {
                 val i = Intent(this@MainActivity, ProfileActivity::class.java)

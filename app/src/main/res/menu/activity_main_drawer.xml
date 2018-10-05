@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Home" />
         <item
+            android:id="@+id/nav_toko"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Kelola Toko" />
+        <item
             android:id="@+id/nav_myaccount"
             android:icon="@drawable/ic_menu_person"
             android:title="Edit Profile" />
