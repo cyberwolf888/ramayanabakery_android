@@ -90,4 +90,9 @@ public class Session {
     public String getPhoto(){
         return pref.getString(PHOTO,"");
     }
+
+    public void setPhoto(String photo) {
+        editor.putString(PHOTO, photo);
+        editor.commit();
+    }
 }

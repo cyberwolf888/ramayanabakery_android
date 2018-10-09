@@ -16,6 +16,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
+import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.util.Log
 import com.android.jerry.ramayanabakery.utility.RequestServer
@@ -139,18 +140,45 @@ class ProfileActivity : AppCompatActivity() {
                 Ion.with(this@ProfileActivity).load(url)
                         .setMultipartFile("foto", "image/jpeg", File(imagePath))
                         .setMultipartParameter("password", passwordStr)
-                        .asString()
+                        .setMultipartParameter("id_pegawai", session!!.getUserId())
+                        .asJsonObject()
                         .setCallback { e, result ->
-                            Log.d("Response", ">" + result)
                             showProgress(false)
+                            Log.d("Response", ">" + result)
+                            val status = result.get("status").toString()
+                            if (status == "1") {
+                                AlertDialog.Builder(this)
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .setTitle("Berhasil")
+                                        .setMessage("Data profile berhasil disimpan.")
+                                        .setPositiveButton("Iya") { dialog, which -> session!!.logoutUser() }
+                                        .show()
+                            }else{
+                                Snackbar.make(findViewById(R.id.profile_form), "Terjadi kesalahan saaat menyambung ke server.", Snackbar.LENGTH_INDEFINITE)
+                                        .setAction("Tutup") { }.show()
+                            }
                         }
             }else{
                 Ion.with(this@ProfileActivity).load(url)
                         .setMultipartParameter("password", passwordStr)
-                        .asString()
+                        .setMultipartParameter("id_pegawai", session!!.getUserId())
+                        .asJsonObject()
                         .setCallback { e, result ->
-                            Log.d("Response", ">" + result)
                             showProgress(false)
+                            Log.d("Response", ">" + result)
+                            val status = result.get("status").toString()
+                            if (status == "1") {
+                                AlertDialog.Builder(this)
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .setTitle("Berhasil")
+                                        .setMessage("Data profile berhasil disimpan.")
+                                        .setPositiveButton("Iya") { dialog, which -> finish() }
+                                        .show()
+                            }else{
+                                Snackbar.make(findViewById(R.id.profile_form), "Terjadi kesalahan saaat menyambung ke server.", Snackbar.LENGTH_INDEFINITE)
+                                        .setAction("Tutup") { }.show()
+                            }
+
                         }
             }
         }
