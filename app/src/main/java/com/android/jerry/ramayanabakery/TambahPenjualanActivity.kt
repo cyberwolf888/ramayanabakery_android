@@ -60,7 +60,7 @@ class TambahPenjualanActivity : AppCompatActivity() {
         var focusView: View? = null
 
         if (TextUtils.isEmpty(qtyStr)) {
-            qty.error = getString(R.string.error_invalid_password)
+            qty.error = "Qty tidak boleh kosong."
             focusView = qty
             cancel = true
         }

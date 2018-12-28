@@ -60,6 +60,31 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.android.jerry.ramayanabakery.KelolaTokoActivity" />
         </activity>
+        <activity
+            android:name=".BarangActivity"
+            android:label="@string/title_activity_barang"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.android.jerry.ramayanabakery.MainActivity" />
+        </activity>
+        <activity
+            android:name=".BookingActivity"
+            android:label="@string/title_activity_booking"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.android.jerry.ramayanabakery.MainActivity" />
+        </activity>
+        <activity
+            android:name=".LunasActivity"
+            android:label="@string/title_activity_lunas"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.android.jerry.ramayanabakery.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

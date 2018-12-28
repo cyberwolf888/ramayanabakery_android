@@ -7,11 +7,19 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Home" />
+            android:title="Canvassing" />
+        <item
+            android:id="@+id/nav_bo"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Booking Order" />
         <item
             android:id="@+id/nav_toko"
             android:icon="@drawable/ic_menu_camera"
             android:title="Kelola Toko" />
+        <item
+            android:id="@+id/nav_barang"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="List Barang" />
         <item
             android:id="@+id/nav_myaccount"
             android:icon="@drawable/ic_menu_person"

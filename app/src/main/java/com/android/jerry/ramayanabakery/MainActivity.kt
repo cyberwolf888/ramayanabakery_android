@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .asJsonObject()
                 .setCallback { e, result ->
                     Log.d("Response", ">" + result)
-
+                    try {
                         val mData = result.getAsJsonArray("data")
                         val xitemList = ArrayList<HashMap<String, String>>()
                         for (i in 0 until mData.size()) {
@@ -131,7 +131,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             dataList.put("nama_product", objData.get("nama_product").asString)
                             dataList.put("nama_member", objData.get("nama_member").asString)
                             dataList.put("nama_toko", objData.get("nama_toko").asString)
-                            if(objData.get("type").asString.equals("1")){
+                            dataList.put("status", objData.get("status").asString)
+
+                            if(objData.get("status").asString.equals("2")){
                                 dataList.put("status", "Lunas")
                             }else{
                                 dataList.put("status", "Proses")
@@ -152,11 +154,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             //setOutput(objSelected.get("id").asString, objSelected.get("name").asString)
                             //finish()
 
-                            if(objSelected.get("type").asString.equals("3")){
-                                Snackbar.make(findViewById(R.id.lvTransaksi), "Lunasi transaksi "+objSelected.get("no_history").asString+" ?", Snackbar.LENGTH_LONG)
-                                        .setAction("Lunasi") { lunas(objSelected.get("no_history").asString) }.show()
+                            if(objSelected.get("status").asString.equals("1")){
+//                                Snackbar.make(findViewById(R.id.lvTransaksi), "Lunasi transaksi "+objSelected.get("no_history").asString+" ?", Snackbar.LENGTH_LONG)
+//                                        .setAction("Lunasi") { lunas(objSelected.get("no_history").asString) }.show()
+                                val i = Intent(this@MainActivity, LunasActivity::class.java)
+                                i.putExtra("no_history", objSelected.get("no_history").asString)
+                                startActivity(i)
+
                             }
                         }
+                    }catch (ex: Exception) {
+                        Snackbar.make(findViewById(R.id.lvTransaksi), "Tidak ada data transaksi.", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Tutup") { }.show()
+                    }
+
 
                     showProgress(false)
                 }
@@ -182,8 +193,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_home -> {
                 // Handle the camera action
             }
+            R.id.nav_bo -> {
+                val i = Intent(this@MainActivity, BookingActivity::class.java)
+                startActivity(i)
+            }
             R.id.nav_toko -> {
                 val i = Intent(this@MainActivity, KelolaTokoActivity::class.java)
+                startActivity(i)
+            }
+            R.id.nav_barang -> {
+                val i = Intent(this@MainActivity, BarangActivity::class.java)
                 startActivity(i)
             }
             R.id.nav_myaccount -> {

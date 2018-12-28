@@ -20,4 +20,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_kelola_toko">Kelola Toko</string>
+    <string name="title_activity_barang">Barang Sales</string>
+    <string name="title_activity_booking">Booking Order</string>
+    <string name="title_activity_lunas">Lunas</string>
 </resources>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_transaksi"
+    android:id="@+id/list_product"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tvMember"
+        android:id="@+id/tvProduct"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
@@ -15,21 +15,7 @@
         android:textColor="@color/colorPrimary"
         />
     <TextView
-        android:id="@+id/tvProduct"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:text=""
-        />
-    <TextView
-        android:id="@+id/tvTgl"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:text=""
-        />
-    <TextView
-        android:id="@+id/tvType"
+        android:id="@+id/tvStock"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="15dp"
