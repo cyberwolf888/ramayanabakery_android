@@ -85,6 +85,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.android.jerry.ramayanabakery.MainActivity" />
         </activity>
+        <activity android:name=".TambahBookingActivity"></activity>
     </application>
 
 </manifest>

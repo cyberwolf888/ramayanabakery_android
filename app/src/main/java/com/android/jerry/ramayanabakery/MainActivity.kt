@@ -27,6 +27,7 @@ import com.koushikdutta.ion.Ion
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import java.text.DecimalFormat
 import java.util.ArrayList
 import java.util.HashMap
 
@@ -119,6 +120,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     try {
                         val mData = result.getAsJsonArray("data")
                         val xitemList = ArrayList<HashMap<String, String>>()
+                        val formatter = DecimalFormat("#,###,###")
                         for (i in 0 until mData.size()) {
                             val objData = mData.get(i).asJsonObject
                             val dataList = HashMap<String, String>()
@@ -127,8 +129,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             dataList.put("tgl_history", objData.get("tgl_history").asString)
                             dataList.put("type", objData.get("type").asString)
                             dataList.put("qty", objData.get("qty").asString)
-                            dataList.put("total_price", objData.get("total_price").asString)
-                            dataList.put("nama_product", objData.get("nama_product").asString)
+                            dataList.put("total_price", "Rp. " + formatter.format(objData.get("total_price").asNumber).toString())
+                            dataList.put("nama_product", objData.get("nama_product").asString + " (" + objData.get("qty").asString + " buah)")
                             dataList.put("nama_member", objData.get("nama_member").asString)
                             dataList.put("nama_toko", objData.get("nama_toko").asString)
                             dataList.put("status", objData.get("status").asString)
@@ -145,8 +147,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 this@MainActivity,
                                 xitemList,
                                 R.layout.list_transaksi,
-                                arrayOf("nama_toko","nama_product","tgl_history","status"),
-                                intArrayOf(R.id.tvMember,R.id.tvProduct,R.id.tvTgl,R.id.tvType)
+                                arrayOf("nama_toko","nama_product","tgl_history","total_price","status"),
+                                intArrayOf(R.id.tvMember,R.id.tvProduct,R.id.tvTgl,R.id.tvTotal,R.id.tvType)
                         )
                         lvTransaksi.adapter = adapter
                         lvTransaksi.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
