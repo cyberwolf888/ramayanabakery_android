@@ -23,4 +23,6 @@
     <string name="title_activity_barang">Barang Sales</string>
     <string name="title_activity_booking">Booking Order</string>
     <string name="title_activity_lunas">Lunas</string>
+    <string name="title_activity_keranjang_canvassing">Keranjang Belanja</string>
+    <string name="title_activity_detail_canvasing">Detail Transaksi</string>
 </resources>

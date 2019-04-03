@@ -5,12 +5,17 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import com.android.jerry.ramayanabakery.database.AppDatabase
+import com.android.jerry.ramayanabakery.database.WeatherDataBase
+import com.android.jerry.ramayanabakery.database.entities.Cart
+import com.android.jerry.ramayanabakery.utility.DbWorkerThread
 import com.android.jerry.ramayanabakery.utility.RequestServer
 import com.android.jerry.ramayanabakery.utility.Session
 import com.google.gson.JsonObject
@@ -21,7 +26,14 @@ class TambahPenjualanActivity : AppCompatActivity() {
 
     private var id_toko: String? = null
     private var id_produk: String? = null
+    private var nama_toko: String? = null
+    private var nama_produk: String? = null
+    private var harga: String? = null
     internal var session: Session? = null
+
+    private var mDb: AppDatabase? = null
+    private lateinit var mDbWorkerThread: DbWorkerThread
+    private val mUiHandler = Handler()
 
     companion object {
 
@@ -35,6 +47,11 @@ class TambahPenjualanActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tambah_penjualan)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        mDbWorkerThread = DbWorkerThread("dbWorkerThread")
+        mDbWorkerThread.start()
+        mDb = AppDatabase.getInstance(this@TambahPenjualanActivity)
+
 
         toko.setOnClickListener{
             val i = Intent(this@TambahPenjualanActivity, ListTokoActivity::class.java)
@@ -70,6 +87,18 @@ class TambahPenjualanActivity : AppCompatActivity() {
             // form field with an error.
             focusView?.requestFocus()
         } else {
+            var cartData = Cart()
+            cartData.toko_id = id_toko ?: ""
+            cartData.barang_id = id_produk ?: ""
+            cartData.qty = qtyStr
+            cartData.nama_toko = nama_toko ?: ""
+            cartData.nama_produk = nama_produk ?: ""
+            cartData.harga = harga ?: ""
+
+            insertCart(cartData = cartData)
+
+
+            /*
             val url = RequestServer().getServer_url() + "simpan_transaksi.php"
             Log.d("Url", ">" + url)
 
@@ -96,7 +125,11 @@ class TambahPenjualanActivity : AppCompatActivity() {
                                         .setIcon(android.R.drawable.ic_dialog_alert)
                                         .setTitle("Berhasil")
                                         .setMessage("Data penjualan berhasil ditambahkan")
-                                        .setPositiveButton("Iya") { dialog, which -> finish() }
+                                        .setPositiveButton("Iya") { dialog, which ->
+                                            val i = Intent(this@TambahPenjualanActivity, KeranjangCanvassingActivity::class.java)
+                                            startActivity(i)
+                                            finish()
+                                        }
                                         .show()
                             }else{
                                 Snackbar.make(findViewById(R.id.btnNext), result.get("message").asString, Snackbar.LENGTH_INDEFINITE)
@@ -107,9 +140,76 @@ class TambahPenjualanActivity : AppCompatActivity() {
                                     .setAction("Tutup") { }.show()
                         }
                     }
+            */
         }
 
 
+    }
+
+    private fun insertCart(cartData: Cart) {
+        val task = Runnable {
+            val result = mDb?.cartDao()?.checkProduct(cartData.toko_id,cartData.barang_id)
+
+            mUiHandler.post({
+                if (result == null || result?.size == 0) {
+                    val task2 = Runnable {
+                        mDb?.cartDao()?.insert(cartData)
+                        mUiHandler.post({
+                            val i = Intent(this@TambahPenjualanActivity, KeranjangCanvassingActivity::class.java)
+                            startActivity(i)
+                            finish()
+                            /*
+                            AlertDialog.Builder(this)
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .setTitle("Berhasil")
+                                    .setMessage("Data penjualan berhasil ditambahkan")
+                                    .setPositiveButton("Iya") { dialog, which ->
+                                        val i = Intent(this@TambahPenjualanActivity, KeranjangCanvassingActivity::class.java)
+                                        startActivity(i)
+                                        finish()
+                                    }
+                                    .show()
+                                    */
+                        })
+                    }
+                    mDbWorkerThread.postTask(task2)
+                }else{
+                    val cart = result.get(0)
+                    cart.qty = (cartData.qty.toInt() + cart.qty.toInt()).toString()
+
+                    val task3 = Runnable {
+                        mDb?.cartDao()?.update(cart)
+                        mUiHandler.post({
+                            val i = Intent(this@TambahPenjualanActivity, KeranjangCanvassingActivity::class.java)
+                            startActivity(i)
+                            finish()
+                            /*
+                            AlertDialog.Builder(this)
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .setTitle("Berhasil")
+                                    .setMessage("Data penjualan berhasil ditambahkan")
+                                    .setPositiveButton("Iya") { dialog, which ->
+                                        val i = Intent(this@TambahPenjualanActivity, KeranjangCanvassingActivity::class.java)
+                                        startActivity(i)
+                                        finish()
+                                    }
+                                    .show()
+                                    */
+                        })
+                    }
+                    mDbWorkerThread.postTask(task3)
+                }
+
+            })
+        }
+        mDbWorkerThread.postTask(task)
+
+    }
+
+    override fun onDestroy() {
+        AppDatabase.destroyInstance()
+        mDbWorkerThread.quit()
+        super.onDestroy()
     }
 
     override fun onBackPressed() {
@@ -144,12 +244,13 @@ class TambahPenjualanActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQ_TOKO && resultCode == Activity.RESULT_OK && data != null) {
             id_toko = data.getStringExtra("id_toko")
-            val nama_toko = data.getStringExtra("nama_toko")
+            nama_toko = data.getStringExtra("nama_toko")
             toko.setText(nama_toko)
         }
         if (requestCode == REQ_PRODUK && resultCode == Activity.RESULT_OK && data != null) {
             id_produk = data.getStringExtra("id_produk")
-            val nama_produk = data.getStringExtra("nama_produk")
+            nama_produk = data.getStringExtra("nama_produk")
+            harga = data.getStringExtra("harga")
             produk.setText(nama_produk)
         }
     }

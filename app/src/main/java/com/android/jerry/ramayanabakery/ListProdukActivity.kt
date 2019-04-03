@@ -63,7 +63,7 @@ class ListProdukActivity : AppCompatActivity() {
                         lvProduct.adapter = adapter
                         lvProduct.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
                             val objSelected = mData.get(i).asJsonObject
-                            setOutput(objSelected.get("id_product").asString, objSelected.get("nama_product").asString)
+                            setOutput(objSelected.get("id_product").asString, objSelected.get("nama_product").asString, objSelected.get("harga").asString)
                             finish()
                         }
                     } catch (ex: Exception) {
@@ -74,10 +74,11 @@ class ListProdukActivity : AppCompatActivity() {
                 }
     }
 
-    private fun setOutput(id_toko:String, nama_toko:String){
+    private fun setOutput(id_toko:String, nama_toko:String, harga:String){
         val output = Intent()
         output.putExtra("id_produk",id_toko)
         output.putExtra("nama_produk",nama_toko)
+        output.putExtra("harga",harga)
         setResult(Activity.RESULT_OK, output)
     }
 

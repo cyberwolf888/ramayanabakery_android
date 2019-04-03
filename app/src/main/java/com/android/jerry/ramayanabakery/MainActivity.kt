@@ -31,8 +31,10 @@ import java.text.DecimalFormat
 import java.util.ArrayList
 import java.util.HashMap
 
+
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     internal var session: Session? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         session = Session(this@MainActivity)
         super.onCreate(savedInstanceState)
@@ -43,7 +45,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
         fab.setOnClickListener { view ->
             val i = Intent(this@MainActivity, TambahPenjualanActivity::class.java)
             startActivity(i)
@@ -128,12 +129,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             dataList.put("id_pegawai", objData.get("id_pegawai").asString)
                             dataList.put("tgl_history", objData.get("tgl_history").asString)
                             dataList.put("type", objData.get("type").asString)
-                            dataList.put("qty", objData.get("qty").asString)
-                            dataList.put("total_price", "Rp. " + formatter.format(objData.get("total_price").asNumber).toString())
-                            dataList.put("nama_product", objData.get("nama_product").asString + " (" + objData.get("qty").asString + " buah)")
                             dataList.put("nama_member", objData.get("nama_member").asString)
                             dataList.put("nama_toko", objData.get("nama_toko").asString)
                             dataList.put("status", objData.get("status").asString)
+                            dataList.put("label_tgl", objData.get("label_tgl").asString)
 
                             if(objData.get("status").asString.equals("2")){
                                 dataList.put("status", "Lunas")
@@ -147,8 +146,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 this@MainActivity,
                                 xitemList,
                                 R.layout.list_transaksi,
-                                arrayOf("nama_toko","nama_product","tgl_history","total_price","status"),
-                                intArrayOf(R.id.tvMember,R.id.tvProduct,R.id.tvTgl,R.id.tvTotal,R.id.tvType)
+                                arrayOf("title","label_tgl","status"),
+                                intArrayOf(R.id.tvMember,R.id.tvTgl,R.id.tvType)
                         )
                         lvTransaksi.adapter = adapter
                         lvTransaksi.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
@@ -156,6 +155,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             //setOutput(objSelected.get("id").asString, objSelected.get("name").asString)
                             //finish()
 
+                            /*
                             if(objSelected.get("status").asString.equals("1")){
 //                                Snackbar.make(findViewById(R.id.lvTransaksi), "Lunasi transaksi "+objSelected.get("no_history").asString+" ?", Snackbar.LENGTH_LONG)
 //                                        .setAction("Lunasi") { lunas(objSelected.get("no_history").asString) }.show()
@@ -164,6 +164,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                 startActivity(i)
 
                             }
+                            */
+
+                            val i = Intent(this@MainActivity, DetailCanvasingActivity::class.java)
+                            i.putExtra("no_history", objSelected.get("no_history").asString)
+                            startActivity(i)
                         }
                     }catch (ex: Exception) {
                         Snackbar.make(findViewById(R.id.lvTransaksi), "Tidak ada data transaksi.", Snackbar.LENGTH_INDEFINITE)
@@ -189,9 +194,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
     }
 
+    override fun onCreateOptionsMenu(menu:Menu):Boolean {
+        getMenuInflater().inflate(R.menu.keranjang_belanja, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        when (item.itemId) {
+            R.id.action_cart -> {
+                val i = Intent(this@MainActivity, KeranjangCanvassingActivity::class.java)
+                startActivity(i)
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
+
             R.id.nav_home -> {
                 // Handle the camera action
             }
@@ -263,4 +288,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             lvTransaksi.visibility = if (show) View.GONE else View.VISIBLE
         }
     }
+
+
 }
