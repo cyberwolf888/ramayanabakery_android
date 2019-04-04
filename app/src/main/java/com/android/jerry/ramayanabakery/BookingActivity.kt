@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.SimpleAdapter
@@ -126,6 +128,25 @@ class BookingActivity : AppCompatActivity() {
                 .setCallback { e, result ->
                     getData()
                 }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu):Boolean {
+        getMenuInflater().inflate(R.menu.keranjang_belanja, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        when (item.itemId) {
+            R.id.action_cart -> {
+                val i = Intent(this, KeranjangCanvassingActivity::class.java)
+                startActivity(i)
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
     }
 
     /**

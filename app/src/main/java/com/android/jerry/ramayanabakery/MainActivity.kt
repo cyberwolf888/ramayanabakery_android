@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
         fab.setOnClickListener { view ->
             val i = Intent(this@MainActivity, TambahPenjualanActivity::class.java)
             startActivity(i)

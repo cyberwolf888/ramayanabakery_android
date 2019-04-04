@@ -172,11 +172,11 @@ class KeranjangCanvassingActivity : AppCompatActivity() {
                                     }
                                     .show()
                         }else{
-                            Snackbar.make(findViewById(R.id.btnNext), result.get("message").asString, Snackbar.LENGTH_INDEFINITE)
+                            Snackbar.make(findViewById(R.id.lvCart), result.get("message").asString, Snackbar.LENGTH_INDEFINITE)
                                     .setAction("Tutup") { }.show()
                         }
                     } catch (ex: Exception) {
-                        Snackbar.make(findViewById(R.id.btnNext), "Terjadi kesalahan saaat menyambung ke server.", Snackbar.LENGTH_INDEFINITE)
+                        Snackbar.make(findViewById(R.id.lvCart), "Terjadi kesalahan saaat menyambung ke server.", Snackbar.LENGTH_INDEFINITE)
                                 .setAction("Tutup") { }.show()
                     }
                 }
@@ -204,7 +204,12 @@ class KeranjangCanvassingActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
             R.id.action_checkout -> {
-                checkoutCart()
+                if (cartData == null || cartData?.size == 0) {
+
+                }else{
+                    checkoutCart()
+                }
+
             }
             else -> return super.onOptionsItemSelected(item)
         }
