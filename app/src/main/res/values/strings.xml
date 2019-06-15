@@ -25,4 +25,5 @@
     <string name="title_activity_lunas">Lunas</string>
     <string name="title_activity_keranjang_canvassing">Keranjang Belanja</string>
     <string name="title_activity_detail_canvasing">Detail Transaksi</string>
+    <string name="title_activity_detail_booking">Detail Booking</string>
 </resources>

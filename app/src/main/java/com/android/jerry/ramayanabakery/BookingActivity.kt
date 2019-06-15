@@ -71,12 +71,10 @@ class BookingActivity : AppCompatActivity() {
                             dataList.put("id_pegawai", objData.get("id_pegawai").asString)
                             dataList.put("tgl_history", objData.get("tgl_history").asString)
                             dataList.put("type", objData.get("type").asString)
-                            dataList.put("qty", objData.get("qty").asString)
-                            dataList.put("total_price", "Rp. " + formatter.format(objData.get("total_price").asNumber).toString())
-                            dataList.put("nama_product", objData.get("nama_product").asString + " (" + objData.get("qty").asString + " buah)")
                             dataList.put("nama_member", objData.get("nama_member").asString)
                             dataList.put("nama_toko", objData.get("nama_toko").asString)
                             dataList.put("status", objData.get("status").asString)
+                            dataList.put("label_tgl", objData.get("label_tgl").asString)
 
                             if(objData.get("status").asString.equals("2")){
                                 dataList.put("status", "Lunas")
@@ -90,8 +88,8 @@ class BookingActivity : AppCompatActivity() {
                                 this@BookingActivity,
                                 xitemList,
                                 R.layout.list_transaksi,
-                                arrayOf("nama_toko","nama_product","tgl_history","total_price","status"),
-                                intArrayOf(R.id.tvMember,R.id.tvProduct,R.id.tvTgl,R.id.tvTotal,R.id.tvType)
+                                arrayOf("title","label_tgl","status"),
+                                intArrayOf(R.id.tvMember,R.id.tvTgl,R.id.tvType)
                         )
                         lvTransaksi.adapter = adapter
                         lvTransaksi.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
@@ -99,12 +97,20 @@ class BookingActivity : AppCompatActivity() {
                             //setOutput(objSelected.get("id").asString, objSelected.get("name").asString)
                             //finish()
 
+                            /*
                             if(objSelected.get("status").asString.equals("1")){
-                                Snackbar.make(findViewById(R.id.lvTransaksi), "Selesaikan transaksi "+objSelected.get("no_history").asString+" ?", Snackbar.LENGTH_LONG)
-                                        .setAction("Selesai") { lunas(objSelected.get("no_history").asString) }.show()
-
+//                                Snackbar.make(findViewById(R.id.lvTransaksi), "Lunasi transaksi "+objSelected.get("no_history").asString+" ?", Snackbar.LENGTH_LONG)
+//                                        .setAction("Lunasi") { lunas(objSelected.get("no_history").asString) }.show()
+                                val i = Intent(this@MainActivity, LunasActivity::class.java)
+                                i.putExtra("no_history", objSelected.get("no_history").asString)
+                                startActivity(i)
 
                             }
+                            */
+
+                            val i = Intent(this@BookingActivity, DetailBookingActivity::class.java)
+                            i.putExtra("no_history", objSelected.get("no_history").asString)
+                            startActivity(i)
                         }
                     }catch (ex: Exception) {
                         Snackbar.make(findViewById(R.id.lvTransaksi), "Tidak ada data transaksi.", Snackbar.LENGTH_INDEFINITE)
@@ -141,7 +147,7 @@ class BookingActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
             R.id.action_cart -> {
-                val i = Intent(this, KeranjangCanvassingActivity::class.java)
+                val i = Intent(this, KeranjangBookingActivity::class.java)
                 startActivity(i)
             }
             else -> return super.onOptionsItemSelected(item)

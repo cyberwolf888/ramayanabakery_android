@@ -4,17 +4,17 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.Room
 import android.content.Context
+import com.android.jerry.ramayanabakery.database.daos.BookingDao
 import com.android.jerry.ramayanabakery.database.daos.CartDao
+import com.android.jerry.ramayanabakery.database.entities.Booking
 import com.android.jerry.ramayanabakery.database.entities.Cart
 
-/**
- * Created by riteshksingh on 1/3/18.
- */
 
-@Database(entities = arrayOf(Cart::class), version = 1)
+@Database(entities = arrayOf(Cart::class,Booking::class), version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun cartDao(): CartDao
+    abstract fun bookingDao(): BookingDao
 
     companion object {
         private var INSTANCE: AppDatabase? = null

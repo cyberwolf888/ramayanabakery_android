@@ -20,6 +20,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".DetailBookingActivity"
+            android:label="@string/title_activity_detail_booking"
+            android:parentActivityName=".BookingActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.android.jerry.ramayanabakery.MainActivity" />
+        </activity>
+        <activity
+            android:name=".KeranjangBookingActivity"
+            android:label="Keranjang Booking"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.android.jerry.ramayanabakery.BookingActivity" />
+        </activity>
+        <activity
             android:name=".DetailCanvasingActivity"
             android:label="@string/title_activity_detail_canvasing"
             android:parentActivityName=".MainActivity"
